@@ -1,23 +1,18 @@
 # NelsonGPT: Pediatric Knowledge Assistant
 
-NelsonGPT is a chatbot powered by AI and the *Nelson Textbook of Pediatrics*. It helps healthcare professionals answer questions related to pediatrics, including symptoms, diagnoses, treatment protocols, and more.
+NelsonGPT is an AI-powered chatbot designed for healthcare professionals, leveraging the *Nelson Textbook of Pediatrics*. It uses free AI models for accurate, evidence-based answers.
 
 ## Features
-- Query the chatbot using natural language.
-- Powered by a Retrieval-Augmented Generation (RAG) pipeline.
-- Uses the *Nelson Textbook of Pediatrics* as its primary knowledge base.
+- Query pediatric questions (symptoms, diagnoses, treatments).
+- Source-based responses using Retrieval-Augmented Generation (RAG).
+- Save and download chat history.
 
 ## Setup
-
 1. Clone the repository:
+   ```bash
+   git clone https://github.com/<your-username>/nelson-gpt.git
+   cd nelson-gpt
 
-git clone https://github.com/your-username/nelson-gpt.git
-cd nelson-gpt
+	2.	Install dependencies:
 
-2. Install dependencies:
-
-pip install -r requirements.txt
-
-3. Run the app:
-
-streamlit run app.py
+pip install -r requirements.t
