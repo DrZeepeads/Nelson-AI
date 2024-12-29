@@ -1,83 +1,33 @@
 import streamlit as st
 from backend.qa_pipeline import ask_question
 
-# Streamlit configuration
-st.set_page_config(
-    page_title="NelsonGPT: Pediatric Knowledge Assistant",
-    page_icon="🩺",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# Set page configuration
+st.set_page_config(page_title="NelsonGPT", page_icon="🩺", layout="wide")
 
-# Custom CSS for styling
-st.markdown(
-    """
-    <style>
-    .main { 
-        background-color: #f7f9fc; 
-    }
-    .stTextInput > div > input {
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        font-size: 1rem;
-    }
-    .stSidebar .stSidebarContent {
-        background-color: #eef2f6;
-        padding: 20px;
-        border-radius: 10px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# App Header
+st.title("NelsonGPT: Advanced Pediatric Knowledge Assistant")
+st.markdown("Ask questions based on the **Nelson Textbook of Pediatrics**.")
 
-# Application title
-st.title("🩺 NelsonGPT: Pediatric Knowledge Assistant")
-st.markdown("#### Your trusted AI companion for pediatric care!")
+# Persistent session for chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-# Sidebar content
-st.sidebar.title("📖 About NelsonGPT")
-st.sidebar.info(
-    """
-    **NelsonGPT** is a chatbot powered by AI and the *Nelson Textbook of Pediatrics*.  
-    Ask questions related to:
-    - Symptoms  
-    - Diagnoses  
-    - Treatments  
-    - Developmental milestones  
-    """
-)
-st.sidebar.markdown("---")
-st.sidebar.title("🔗 Resources")
-st.sidebar.markdown("[Nelson Textbook of Pediatrics](https://www.elsevier.com/)")  # Example link
-
-# Input box for user queries
-st.markdown("### Ask your question below:")
-query = st.text_input(
-    "",
-    placeholder="Type your question here, e.g., 'What are the symptoms of measles?'",
-    help="Ask anything related to pediatrics, symptoms, treatments, or diagnoses."
-)
-
-# Submit button
+# Input Section
+query = st.text_input("Enter your pediatric question:")
 if query:
-    with st.spinner("Processing your query..."):
-        try:
-            # Call the backend to get an answer
-            answer = ask_question(query)
+    with st.spinner("Thinking..."):
+        response = ask_question(query)
+        st.session_state.messages.append({"query": query, "response": response})
+        st.markdown(f"### Answer: {response}")
 
-            # Display the answer
-            st.success("### Answer:")
-            st.write(answer)
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+# Chat History Section
+if st.session_state.messages:
+    st.markdown("### Chat History")
+    for msg in st.session_state.messages:
+        st.write(f"**Q:** {msg['query']}")
+        st.write(f"**A:** {msg['response']}")
 
-# Footer
-st.markdown("---")
-st.markdown(
-    """
-    *Developed by Pediatric AI Solutions.*  
-    For questions or feedback, contact us at [support@example.com](mailto:support@example.com).
-    """
-)
+# Download Chat History
+if st.session_state.messages:
+    history = "\n".join([f"Q: {m['query']}\nA: {m['response']}" for m in st.session_state.messages])
+    st.download_button("Download Chat History", history, "chat_history.txt")
